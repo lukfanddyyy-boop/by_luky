@@ -1,0 +1,1153 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Jejak Puisi Indonesia - Website edukasi modern tentang sejarah, perkembangan, struktur, jenis, tokoh, dan contoh puisi Indonesia.">
+    <title>Jejak Puisi Indonesia | Menelusuri Keindahan Kata</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400..700;1,400..700&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        /* --- DESIGN SYSTEM & VARIABLES --- */
+        :root {
+            --bg-base: #FDFBF7;
+            --bg-surface: #FFFFFF;
+            --bg-accent: #F5EBE0;
+            --text-primary: #2C1A11;
+            --text-secondary: #5C4D43;
+            --primary: #4A3B32;
+            --accent: #A07855;
+            --border: #E6DFD3;
+            --shadow: rgba(74, 59, 50, 0.08);
+            --transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+
+        body.dark-mode {
+            --bg-base: #14110F;
+            --bg-surface: #1C1814;
+            --bg-accent: #25201C;
+            --text-primary: #F5EBE0;
+            --text-secondary: #CDBCB0;
+            --primary: #E6DFD3;
+            --accent: #D4AF37;
+            --border: #3E322A;
+            --shadow: rgba(0, 0, 0, 0.4);
+        }
+
+        /* --- BASE STYLES --- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--bg-base);
+            color: var(--text-primary);
+            transition: background-color 0.3s, color 0.3s;
+            overflow-x: hidden;
+            line-height: 1.7;
+        }
+
+        h1, h2, h3, h4, .font-serif {
+            font-family: 'Playfair Display', serif;
+        }
+
+        p, .font-poetry {
+            font-family: 'Lora', serif;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        li {
+            list-style: none;
+        }
+
+        section {
+            padding: 100px 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 50px;
+            position: relative;
+            color: var(--primary);
+        }
+
+        .section-title::after {
+            content: '❦';
+            display: block;
+            font-size: 1.2rem;
+            color: var(--accent);
+            margin-top: 10px;
+        }
+
+        /* --- LOADING ANIMATION --- */
+        #loader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #FDFBF7;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 0.5s ease, visibility 0.5s;
+        }
+        body.dark-mode #loader { background: #14110F; }
+
+        .quill-animation {
+            font-size: 3rem;
+            color: #4A3B32;
+            animation: write 2s infinite ease-in-out;
+        }
+        body.dark-mode .quill-animation { color: #D4AF37; }
+
+        @keyframes write {
+            0%, 100% { transform: rotate(0deg) translate(0, 0); }
+            50% { transform: rotate(-15deg) translate(10px, -10px); }
+        }
+
+        /* --- SCROLL ANIMATION SHIELD --- */
+        .fade-in-element {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+
+        .fade-in-element.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* --- NAVBAR --- */
+        header {
+            position: sticky;
+            top: 0;
+            background: var(--bg-base);
+            border-bottom: 1px solid var(--border);
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+            transition: var(--transition);
+        }
+
+        .navbar {
+            max-width: 1300px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+            color: var(--primary);
+        }
+
+        .nav-container {
+            display: flex;
+            align-items: center;
+            gap: 30px;
+        }
+
+        .nav-menu {
+            display: flex;
+            gap: 20px;
+        }
+
+        .nav-link {
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: var(--transition);
+            position: relative;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--accent);
+            transition: var(--transition);
+        }
+
+        .nav-link:hover::after { width: 100%; }
+        .nav-link:hover { color: var(--accent); }
+
+        .search-box {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .search-box input {
+            padding: 8px 35px 8px 15px;
+            border-radius: 20px;
+            border: 1px solid var(--border);
+            background: var(--bg-surface);
+            color: var(--text-primary);
+            outline: none;
+            width: 180px;
+            transition: var(--transition);
+        }
+
+        .search-box input:focus { width: 240px; border-color: var(--accent); }
+        .search-box i { position: absolute; right: 12px; color: var(--text-secondary); }
+
+        .theme-toggle {
+            cursor: pointer;
+            font-size: 1.2rem;
+            background: none;
+            border: none;
+            color: var(--text-primary);
+            transition: var(--transition);
+        }
+
+        .hamburger {
+            display: none;
+            cursor: pointer;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .hamburger span {
+            width: 25px;
+            height: 3px;
+            background: var(--text-primary);
+            transition: var(--transition);
+        }
+
+        /* --- HERO SECTION --- */
+        #hero {
+            height: 85vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            background: linear-gradient(rgba(253, 251, 247, 0.85), rgba(253, 251, 247, 0.85)), url('https://images.unsplash.com/photo-1506880018603-83d5b814b5a6?auto=format&fit=crop&w=1920&q=80') no-repeat center/cover;
+            position: relative;
+            padding: 0 20px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        body.dark-mode #hero {
+            background: linear-gradient(rgba(20, 17, 15, 0.9), rgba(20, 17, 15, 0.9)), url('https://images.unsplash.com/photo-1506880018603-83d5b814b5a6?auto=format&fit=crop&w=1920&q=80') no-repeat center/cover;
+        }
+
+        .hero-content h1 {
+            font-size: 4rem;
+            font-weight: 800;
+            letter-spacing: 2px;
+            color: var(--primary);
+            margin-bottom: 20px;
+            line-height: 1.2;
+        }
+
+        .hero-content p {
+            font-size: 1.5rem;
+            font-style: italic;
+            color: var(--text-secondary);
+            margin-bottom: 40px;
+        }
+
+        .hero-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .btn {
+            padding: 12px 30px;
+            border-radius: 30px;
+            font-weight: 600;
+            transition: var(--transition);
+            cursor: pointer;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: var(--bg-base);
+            border: 1px solid var(--primary);
+        }
+
+        .btn-primary:hover {
+            background: transparent;
+            color: var(--primary);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--primary);
+            border: 1px solid var(--primary);
+        }
+
+        .btn-secondary:hover {
+            background: var(--primary);
+            color: var(--bg-base);
+        }
+
+        /* --- PENGERTIAN --- */
+        .about-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 50px;
+            align-items: center;
+        }
+
+        .about-text h3 {
+            font-size: 2rem;
+            margin-bottom: 20px;
+            color: var(--accent);
+        }
+
+        .about-text p {
+            margin-bottom: 20px;
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+        }
+
+        .about-img {
+            width: 100%;
+            height: 350px;
+            background: url('https://images.unsplash.com/photo-1455390582262-044cdead277a?auto=format&fit=crop&w=800&q=80') center/cover;
+            border-radius: 15px;
+            box-shadow: 0 20px 40px var(--shadow);
+        }
+
+        /* --- TIMELINE SEJARAH --- */
+        .timeline {
+            position: relative;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 40px 0;
+        }
+
+        .timeline::after {
+            content: '';
+            position: absolute;
+            width: 2px;
+            background: var(--border);
+            top: 0;
+            bottom: 0;
+            left: 50%;
+            margin-left: -1px;
+        }
+
+        .timeline-item {
+            padding: 10px 40px;
+            position: relative;
+            background: transparent;
+            width: 50%;
+        }
+
+        .timeline-item::after {
+            content: '🖋️';
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            right: -15px;
+            background-color: var(--bg-base);
+            top: 15px;
+            border-radius: 50%;
+            z-index: 1;
+            text-align: center;
+            font-size: 0.9rem;
+        }
+
+        .left { left: 0; text-align: right; }
+        .right { left: 50%; }
+
+        .right::after { left: -15px; }
+
+        .timeline-content {
+            padding: 25px;
+            background: var(--bg-surface);
+            position: relative;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px var(--shadow);
+            border: 1px solid var(--border);
+            transition: var(--transition);
+        }
+
+        .timeline-content:hover {
+            transform: translateY(-5px);
+            border-color: var(--accent);
+        }
+
+        .timeline-content h3 {
+            color: var(--accent);
+            margin-bottom: 10px;
+            font-size: 1.4rem;
+        }
+
+        .timeline-content ul {
+            margin-top: 10px;
+            padding-right: 0;
+        }
+        .right .timeline-content ul { padding-left: 20px; list-style-type: disc;}
+        .left .timeline-content ul { list-style-type: none; }
+
+        /* --- CARDS GRID (JENIS) --- */
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .card {
+            background: var(--bg-surface);
+            padding: 35px;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            box-shadow: 0 10px 25px var(--shadow);
+            transition: var(--transition);
+        }
+
+        .card:hover {
+            transform: translateY(-8px);
+            border-color: var(--accent);
+            box-shadow: 0 15px 35px var(--shadow);
+        }
+
+        .card-icon {
+            font-size: 2rem;
+            color: var(--accent);
+            margin-bottom: 20px;
+        }
+
+        .card h3 {
+            margin-bottom: 15px;
+            font-size: 1.5rem;
+            color: var(--primary);
+        }
+
+        /* --- STRUKTUR PUISI --- */
+        .structure-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+        }
+
+        .structure-box {
+            background: var(--bg-surface);
+            padding: 40px;
+            border-radius: 15px;
+            border-left: 5px solid var(--accent);
+            box-shadow: 0 10px 30px var(--shadow);
+        }
+
+        .structure-box h3 {
+            font-size: 1.8rem;
+            margin-bottom: 25px;
+            color: var(--primary);
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 10px;
+        }
+
+        .struct-item {
+            margin-bottom: 25px;
+        }
+
+        .struct-item strong {
+            color: var(--accent);
+            font-size: 1.1rem;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .struct-item p {
+            font-size: 0.95rem;
+            color: var(--text-primary);
+            margin-bottom: 5px;
+        }
+
+        .struct-item small {
+            display: block;
+            color: var(--text-secondary);
+            background: var(--bg-base);
+            padding: 6px 12px;
+            border-left: 2px solid var(--accent);
+            font-style: italic;
+        }
+
+        /* --- TOKOH --- */
+        .tokoh-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 25px;
+        }
+
+        .tokoh-card {
+            background: var(--bg-surface);
+            border-radius: 15px;
+            overflow: hidden;
+            border: 1px solid var(--border);
+            box-shadow: 0 10px 30px var(--shadow);
+            transition: var(--transition);
+            text-align: center;
+            padding: 30px;
+        }
+
+        .tokoh-card:hover { 
+            transform: translateY(-5px); 
+            border-color: var(--accent); 
+        }
+
+        .avatar {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            margin: 0 auto 20px;
+            overflow: hidden;
+            border: 3px solid var(--border);
+            box-shadow: 0 5px 15px var(--shadow);
+        }
+
+        .avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: sepia(50%);
+            transition: var(--transition);
+        }
+
+        .tokoh-card:hover .avatar img {
+            filter: sepia(0%);
+            transform: scale(1.05);
+        }
+
+        .tokoh-card h3 { font-size: 1.5rem; margin-bottom: 5px; color: var(--primary); }
+        .nickname { font-style: italic; color: var(--accent); font-size: 0.9rem; margin-bottom: 15px; }
+        .tokoh-card p { font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 15px; text-align: center; }
+        .works { font-size: 0.85rem; border-top: 1px dashed var(--border); padding-top: 15px; }
+        .works span { display: block; font-weight: 600; margin-bottom: 5px; color: var(--primary); }
+
+        /* --- CONTOH PUISI (PAPER LOOK) --- */
+        .poetry-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 40px;
+        }
+
+        .poetry-sheet {
+            background: #FFFDF9;
+            color: #2C1A11;
+            padding: 45px 35px;
+            border-radius: 4px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.06), inset 0 0 40px rgba(0,0,0,0.02);
+            border: 1px solid #EFE9DB;
+            position: relative;
+            min-height: 350px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        body.dark-mode .poetry-sheet {
+            background: #F4EFE3;
+            color: #2C1A11;
+        }
+
+        .poetry-sheet::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 25px; bottom: 0;
+            width: 1px;
+            border-left: 1px solid #F0D3D3;
+        }
+
+        .poetry-sheet h3 {
+            font-size: 1.8rem;
+            margin-bottom: 25px;
+            color: #4A3B32;
+            letter-spacing: 1px;
+        }
+
+        .poetry-content {
+            font-style: italic;
+            font-size: 1.05rem;
+            white-space: pre-line;
+            line-height: 2;
+        }
+
+        /* --- MANFAAT (ICON SECTION) --- */
+        .benefits-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 25px;
+            text-align: center;
+        }
+
+        .benefit-item {
+            padding: 30px 20px;
+            background: var(--bg-surface);
+            border-radius: 12px;
+            box-shadow: 0 8px 20px var(--shadow);
+            transition: var(--transition);
+        }
+
+        .benefit-item:hover { transform: scale(1.03); }
+        .benefit-item i { font-size: 2.2rem; color: var(--accent); margin-bottom: 15px; }
+        .benefit-item p { font-weight: 500; font-size: 1.05rem; }
+
+        /* --- QUIZ INTERAKTIF --- */
+        .quiz-wrapper {
+            max-width: 650px;
+            margin: 0 auto;
+            background: var(--bg-surface);
+            border: 1px solid var(--border);
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 15px 35px var(--shadow);
+            text-align: center;
+        }
+
+        .quiz-question { font-size: 1.3rem; font-weight: 600; margin-bottom: 25px; }
+        
+        .quiz-options {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .option-btn {
+            padding: 14px;
+            border: 1px solid var(--border);
+            background: var(--bg-base);
+            color: var(--text-primary);
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: var(--transition);
+        }
+
+        .option-btn:hover { border-color: var(--accent); background: var(--bg-accent); }
+        .option-btn.correct { background: #D4EDDA !important; color: #155724 !important; border-color: #C3E6CB !important; }
+        .option-btn.wrong { background: #F8D7DA !important; color: #721C24 !important; border-color: #F5C6CB !important; }
+
+        #quiz-result { font-weight: 700; font-size: 1.2rem; margin-top: 15px; min-height: 30px; }
+
+        /* --- FOOTER --- */
+        footer {
+            background: var(--bg-surface);
+            border-top: 1px solid var(--border);
+            padding: 50px 20px;
+            text-align: center;
+        }
+
+        .footer-brand h2 { font-size: 1.8rem; color: var(--primary); margin-bottom: 5px; }
+        .footer-brand p { font-style: italic; color: var(--text-secondary); margin-bottom: 25px; }
+        .copyright { font-size: 0.9rem; color: var(--text-secondary); border-top: 1px solid var(--border); padding-top: 25px; }
+
+        /* --- UTILITIES --- */
+        .back-to-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: var(--accent);
+            color: #FFF;
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            opacity: 0;
+            visibility: hidden;
+            transition: var(--transition);
+            z-index: 99;
+        }
+
+        .back-to-top.show { opacity: 1; visibility: visible; }
+
+        /* --- RESPONSIVE MEDIA QUERIES --- */
+        @media (max-width: 992px) {
+            .hero-content h1 { font-size: 3rem; }
+            .about-container, .structure-container { grid-template-columns: 1fr; }
+            .timeline::after { left: 30px; }
+            .timeline-item { width: 100%; padding-left: 70px; padding-right: 20px; }
+            .left { text-align: left; }
+            .left::after, .right::after { left: 15px; }
+            .right { left: 0; }
+        }
+
+        @media (max-width: 768px) {
+            .nav-menu {
+                position: fixed;
+                top: 73px; right: -100%;
+                width: 250px; height: calc(100vh - 73px);
+                background: var(--bg-surface);
+                flex-direction: column;
+                padding: 40px;
+                box-shadow: -10px 10px 20px var(--shadow);
+                transition: 0.4s ease;
+            }
+            .nav-menu.active { right: 0; }
+            .hamburger { display: flex; }
+            .search-box input { width: 130px; }
+            .search-box input:focus { width: 160px; }
+            .hero-content h1 { font-size: 2.3rem; }
+            .quiz-options { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="loader">
+        <i class="fa-solid fa-feather-pointed quill-animation"></i>
+        <p style="margin-top: 15px; font-family: 'Playfair Display', serif; font-size: 1.2rem; color: var(--text-secondary);">Memuka Lembaran Buku...</p>
+    </div>
+
+    <header>
+        <nav class="navbar">
+            <a href="#" class="logo">By Luky.</a>
+            <div class="nav-container">
+                <div class="search-box">
+                    <input type="text" id="search-input" placeholder="Cari materi...">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                </div>
+                <ul class="nav-menu" id="nav-menu">
+                    <li><a href="#about" class="nav-link">Pengertian</a></li>
+                    <li><a href="#sejarah" class="nav-link">Sejarah</a></li>
+                    <li><a href="#jenis" class="nav-link">Jenis</a></li>
+                    <li><a href="#struktur" class="nav-link">Struktur</a></li>
+                    <li><a href="#tokoh" class="nav-link">Tokoh</a></li>
+                    <li><a href="#contoh" class="nav-link">Contoh</a></li>
+                </ul>
+                <button class="theme-toggle" id="theme-btn" aria-label="Ubah Tema">
+                    <i class="fa-solid fa-moon"></i>
+                </button>
+                <div class="hamburger" id="hamburger">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <section id="hero">
+        <div class="hero-content">
+            <h1>JEJAK PUISI INDONESIA</h1>
+            <p>"Remidi Mata pelajaran Bahasa Indonesia."</p>
+            <div class="hero-buttons">
+                <a href="#sejarah" class="btn btn-primary">Pelajari Sejarah</a>
+                <a href="#contoh" class="btn btn-secondary">Jelajahi Puisi</a>
+            </div>
+        </div>
+    </section>
+
+    <section id="about" class="fade-in-element">
+        <h2 class="section-title">Apa Itu Puisi?</h2>
+        <div class="about-container">
+            <div class="about-text">
+                <h3>Esensi Kata yang Mendalam</h3>
+                <p>Puisi adalah karya sastra yang mengungkapkan pikiran, perasaan, pengalaman, dan imajinasi penyair melalui pilihan kata yang indah dan bermakna. Berbeda dengan prosa, puisi lebih menekankan keindahan bahasa, irama, dan makna yang mendalam.</p>
+                <p>Sejak zaman dahulu, puisi digunakan sebagai sarana untuk menyampaikan pesan, nasihat, cerita kepahlawanan, hingga ungkapan cinta dan dinamika kehidupan sosial.</p>
+            </div>
+            <div class="about-img"></div>
+        </div>
+    </section>
+
+    <section id="sejarah" class="fade-in-element">
+        <h2 class="section-title">Sejarah Puisi</h2>
+        <div class="timeline">
+            <div class="timeline-item left fade-in-element">
+                <div class="timeline-content">
+                    <h3>Masa Kuno</h3>
+                    <p>Puisi merupakan bentuk sastra tertua yang digunakan masyarakat untuk menyampaikan cerita, tradisi, dan kepercayaan secara lisan sebelum adanya budaya tulisan.</p>
+                </div>
+            </div>
+            <div class="timeline-item right fade-in-element">
+                <div class="timeline-content">
+                    <h3>Puisi Lama di Indonesia</h3>
+                    <p>Puisi berkembang ketat dalam bentuk aturan bait dan rima terikat. Mengakar kuat pada tradisi melayu seperti:</p>
+                    <ul style="margin-left: 20px;">
+                        <li>Pantun</li>
+                        <li>Syair</li>
+                        <li>Gurindam</li>
+                        <li>Mantra</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="timeline-item left fade-in-element">
+                <div class="timeline-content">
+                    <h3>Masa Pujangga Baru</h3>
+                    <p>Sekitar tahun 1930-an, puisi mulai berkembang dengan gaya yang lebih modern dan dinamis. Para penyair mulai mengangkat tema nasionalisme, pendidikan, serta gagasan kemajuan bangsa.</p>
+                </div>
+            </div>
+            <div class="timeline-item right fade-in-element">
+                <div class="timeline-content">
+                    <h3>Angkatan 45</h3>
+                    <p>Masa yang dipelopori oleh vitalitas ekspresi seorang Chairil Anwar. Karakteristik utamanya meliputi bahasa yang jauh lebih bebas, ekspresi individual yang kuat, serta semangat perjuangan yang revolusioner.</p>
+                </div>
+            </div>
+            <div class="timeline-item left fade-in-element">
+                <div class="timeline-content">
+                    <h3>Puisi Modern</h3>
+                    <p>Memasuki era kontemporer, puisi menjadi sangat bebas dalam wujud bentuk, pilihan tema, maupun gaya bahasa. Penyair modern diberikan keleluasaan penuh untuk bereksperimen dengan berbagai teknik penulisan baru.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="jenis" class="fade-in-element">
+        <h2 class="section-title">Jenis-Jenis Puisi</h2>
+        <div class="grid-container">
+            <div class="card">
+                <i class="fa-solid fa-scroll card-icon"></i>
+                <h3>Pantun</h3>
+                <p>Puisi lama yang terdiri atas empat baris dalam satu bait dengan pola rima akhir silang (a-b-a-b).</p>
+            </div>
+            <div class="card">
+                <i class="fa-solid fa-book-open card-icon"></i>
+                <h3>Syair</h3>
+                <p>Puisi lama yang berasal dari sastra serapan Melayu arab, biasanya membawa kisah narasi panjang atau nasihat dengan rima a-a-a-a.</p>
+            </div>
+            <div class="card">
+                <i class="fa-solid fa-pen-fancy card-icon"></i>
+                <h3>Gurindam</h3>
+                <p>Puisi dua baris (sajak dua seuntai) yang sarat akan petuah hidup, filosofi, atau ajaran moral berima sama.</p>
+            </div>
+            <div class="card">
+                <i class="fa-solid fa-wand-sparkles card-icon"></i>
+                <h3>Mantra</h3>
+                <p>Puisi lama bermuatan magis yang umumnya dirapalkan dalam upacara adat, ritual, atau kepercayaan spiritual tertentu.</p>
+            </div>
+            <div class="card">
+                <i class="fa-solid fa-feather card-icon"></i>
+                <h3>Puisi Bebas</h3>
+                <p>Puisi modern yang tidak lagi terikat oleh belenggu aturan jumlah baris, suku kata, maupun keselarasan rima.</p>
+            </div>
+            <div class="card">
+                <i class="fa-solid fa-mask card-icon"></i>
+                <h3>Puisi Kontemporer</h3>
+                <p>Puisi modern yang menonjolkan kebebasan penuh dari segi tipografi, bentuk cetakan visual, dan penyajian kreatif.</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="struktur" class="fade-in-element">
+        <h2 class="section-title">Struktur Batin & Fisik Puisi</h2>
+        <div class="structure-container">
+            <div class="structure-box">
+                <h3>Struktur Fisik (Metode Penyampaian)</h3>
+                
+                <div class="struct-item">
+                    <strong>Diksi (Pilihan Kata)</strong>
+                    <p>Penyair memilih kata secara cermat demi memunculkan efek estetika dan makna yang padat. Kata yang dipilih biasanya kaya akan rona konotatif.</p>
+                    <small>Contoh: Pemilihan kata "Mampus kau dikunyah rayuan" (Chairil Anwar) terasa lebih kuat dibanding kata "Mati".</small>
+                </div>
+                
+                <div class="struct-item">
+                    <strong>Imaji (Citraan)</strong>
+                    <p>Susunan kata yang mampu memicu daya imajinasi atau merangsang indra pembaca (penglihatan, pendengaran, atau perabaan) seolah merasakannya sendiri.</p>
+                    <small>Contoh: Citraan rabaan pada kalimat "Desir angin malam menusuk tulang".</small>
+                </div>
+                
+                <div class="struct-item">
+                    <strong>Majas (Gaya Bahasa)</strong>
+                    <p>Bahasa figuratif yang digunakan untuk menghidupkan suasana dan menciptakan efek analogi yang indah di dalam benak pembaca.</p>
+                    <small>Contoh: Majas personifikasi "Sore itu, sang surya menangis pelan di ujung barat".</small>
+                </div>
+                
+                <div class="struct-item">
+                    <strong>Tipografi (Perwajahan)</strong>
+                    <p>Tata letak penulisan huruf, baris, dan bait. Dalam puisi modern, tipografi bukan sekadar dekorasi, melainkan bagian dari penyampaian makna itu sendiri.</p>
+                    <small>Contoh: Puisi kontemporer yang ditulis berkelok-kelok menyerupai bentuk grafik atau benda tertentu.</small>
+                </div>
+                
+                <div class="struct-item">
+                    <strong>Rima & Ritme</strong>
+                    <p>Persamaan bunyi (baik di awal, tengah, atau akhir baris) serta tinggi rendah, panjang pendek, dan keras lembutnya suara saat puisi dideklamasikan.</p>
+                    <small>Contoh: Pola rima silang (a-b-a-b) yang wajib melekat pada bait-bait pantun klasik.</small>
+                </div>
+            </div>
+
+            <div class="structure-box">
+                <h3>Struktur Batin (Hakikat Puisi)</h3>
+                
+                <div class="struct-item">
+                    <strong>Tema (Sense)</strong>
+                    <p>Gagasan pokok atau landasan utama yang ingin disampaikan oleh penyair melalui keseluruhan isi puisinya (misal: tema ketuhanan, kemানুsiaan, atau kritik sosial).</p>
+                    <small>Contoh: Puisi "Aku" karya Chairil Anwar membawa tema mayoritas tentang eksistensialisme diri dan kebebasan.</small>
+                </div>
+                
+                <div class="struct-item">
+                    <strong>Rasa (Feeling)</strong>
+                    <p>Sikap emosional penyair terhadap tema atau masalah yang diangkat di dalam puisi. Rasa ini akan ikut memengaruhi atmosfer emosi pembaca.</p>
+                    <small>Contoh: Munculnya rasa haru, kemarahan yang meluap, kesunyian, atau rasa benci yang tersirat.</small>
+                </div>
+                
+                <div class="struct-item">
+                    <strong>Nada (Tone)</strong>
+                    <p>Sikap penyair ketika berhadapan dengan pembaca. Apakah dia ingin berbicara dengan nada mendikte, menggurui, menyindir, atau sekadar meratap pasrah.</p>
+                    <small>Contoh: Nada berwibawa dan penuh protes dalam puisi-puisi demonstrasi milik W.S. Rendra.</small>
+                </div>
+                
+                <div class="struct-item">
+                    <strong>Amanat (Intention)</strong>
+                    <p>Pesan moral, nilai didaktis, atau dorongan tersembunyi yang sengaja ditiupkan oleh sang penyair agar bisa direnungkan dan dipetik kegunaannya oleh pembaca.</p>
+                    <small>Contoh: Amanat untuk tetap teguh berjuang mempertahankan prinsip hidup meski diterjang badai ujian.</small>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="tokoh" class="fade-in-element">
+        <h2 class="section-title">Tokoh Penyair Indonesia</h2>
+        <div class="tokoh-container">
+            <div class="tokoh-card">
+                <div class="avatar">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/e/ec/Chairil_Anwar_profile.jpg" alt="Chairil Anwar">
+                </div>
+                <h3>Chairil Anwar</h3>
+                <div class="nickname">"Si Binatang Jalang"</div>
+                <p>Pelopor Angkatan 45 yang mendobrak pakem puisi lama dengan bahasa yang vital, individualis, dan penuh semangat pemberontakan.</p>
+                <div class="works"><span>Karya Terkenal:</span>"Aku", "Karawang-Bekasi", "Diponegoro"</div>
+            </div>
+            
+            <div class="tokoh-card">
+                <div class="avatar">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/a/a2/WS_Rendra_tengah.jpg" alt="W.S. Rendra">
+                </div>
+                <h3>W.S. Rendra</h3>
+                <div class="nickname">"Burung Merak"</div>
+                <p>Sastrawan panggung terbesar Indonesia. Dikenal karena puisinya yang sarat akan kritik sosial, teaterikal, dan pembelaan kaum tertindas.</p>
+                <div class="works"><span>Karya Terkenal:</span>"Sajak Sebatang Lisong", "Blues untuk Bonnie"</div>
+            </div>
+
+            <div class="tokoh-card">
+                <div class="avatar">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/e/ee/Sapardi_Djoko_Damono%2C_2016_Flickr.jpg" alt="Sapardi Djoko Damono">
+                </div>
+                <h3>Sapardi Djoko Damono</h3>
+                <div class="nickname">Penyair Romantis-Reflektif</div>
+                <p>Begawan sastra yang dikagumi karena kemampuannya mengubah kesederhanaan kata menjadi rona puitis yang sangat dalam dan romantis.</p>
+                <div class="works"><span>Karya Terkenal:</span>"Hujan Bulan Juni", "Aku Ingin", "Pada Suatu Hari Nanti"</div>
+            </div>
+
+            <div class="tokoh-card">
+                <div class="avatar">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/9/90/Taufiq_Ismail_on_27_November_2010.jpg" alt="Taufiq Ismail">
+                </div>
+                <h3>Taufiq Ismail</h3>
+                <div class="nickname">"Penyair Suara Keadilan"</div>
+                <p>Tokoh penting Angkatan 66. Puisi-puisinya tajam merekam sejarah, situasi politik, serta sarat akan pesan religius dan moralitas batin.</p>
+                <div class="works"><span>Karya Terkenal:</span>"Tirani dan Benteng", "Dengan Puisi Aku"</div>
+            </div>
+        </div>
+    </section>
+
+    <section id="contoh" class="fade-in-element">
+        <h2 class="section-title">Lentera Karya (Contoh Puisi)</h2>
+        <div class="poetry-container">
+            <div class="poetry-sheet">
+                <h3>Senja</h3>
+                <div class="poetry-content">Mentari pulang perlahan,
+                    Membawa warna keemasan,
+                    Langit diam dalam kenangan,
+                    Menunggu malam datang berteman.</div>
+            </div>
+            <div class="poetry-sheet">
+                <h3>Harapan</h3>
+                <div class="poetry-content">Aku menanam mimpi hari ini,
+                    Di tanah usaha yang tak henti,
+                    Kelak tumbuh menjadi prestasi,
+                    Menyinari langkah di masa nanti.</div>
+            </div>
+            <div class="poetry-sheet">
+                <h3>Sahabat</h3>
+                <div class="poetry-content">Dalam tawa dan cerita,
+                    Kau hadir memberi warna,
+                    Saat langkah terasa lelah,
+                    Kau menjadi tempat bersandar.</div>
+            </div>
+        </div>
+    </section>
+
+    <section class="fade-in-element">
+        <h2 class="section-title">Manfaat Mempelajari Puisi</h2>
+        <div class="benefits-container">
+            <div class="benefit-item"><i class="fa-solid fa-lightbulb"></i><p>Meningkatkan Kreativitas</p></div>
+               
+            <div class="benefit-item"><i class="fa-solid fa-brain"></i><p>Melatih Berpikir Kritis</p></div>
+            <div class="benefit-item"><i class="fa-solid fa-heart"></i><p>Menumbuhkan Empati</p></div>
+            <div class="benefit-item"><i class="fa-solid fa-pen"></i><p>Mengembangkan Tulisan</p></div>
+        </div>
+    </section>
+
+    <section id="quiz" class="fade-in-element">
+        <h2 class="section-title">Uji Pemahamanmu</h2>
+        <div class="quiz-wrapper">
+            <div class="quiz-question">Pertanyaan: "Pantun terdiri dari berapa baris dalam satu bait?"</div>
+            <div class="quiz-options">
+                <button class="option-btn" onclick="checkAnswer(this, 2)">2 Baris</button>
+                <button class="option-btn" onclick="checkAnswer(this, 4)">4 Baris</button>
+                <button class="option-btn" onclick="checkAnswer(this, 6)">6 Baris</button>
+                <button class="option-btn" onclick="checkAnswer(this, 8)">8 Baris</button>
+            </div>
+            <div id="quiz-result"></div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-brand">
+            <h2>Jejak Puisi Indonesia</h2>
+            <p>"Merangkai Kata, Mengabadikan Makna."</p>
+        </div>
+        <div class="copyright">
+            &copy; 2026 Jejak Puisi Indonesia. By luky Irfandi.
+        </div>
+    </footer>
+
+    <div class="back-to-top" id="scrollTop" onclick="scrollToTop()"><i class="fa-solid fa-arrow-up"></i></div>
+
+    <script>
+        // 1. LOADING REMOVER
+        window.addEventListener('load', () => {
+            const loader = document.getElementById('loader');
+            setTimeout(() => {
+                loader.style.opacity = '0';
+                loader.style.visibility = 'hidden';
+            }, 800);
+        });
+
+        // 2. LIGHT / DARK MODE TOGGLE
+        const themeBtn = document.getElementById('theme-btn');
+        const icon = themeBtn.querySelector('i');
+
+        if (localStorage.getItem('dark-mode') === 'true') {
+            document.body.classList.add('dark-mode');
+            icon.classList.replace('fa-moon', 'fa-sun');
+        }
+
+        themeBtn.addEventListener('click', () => {
+            document.body.classList.toggle('dark-mode');
+            const isDark = document.body.classList.contains('dark-mode');
+            localStorage.setItem('dark-mode', isDark);
+            
+            if(isDark) {
+                icon.classList.replace('fa-moon', 'fa-sun');
+            } else {
+                icon.classList.replace('fa-sun', 'fa-moon');
+            }
+        });
+
+        // 3. RESPONSIVE HAMBURGER MENU
+        const hamburger = document.getElementById('hamburger');
+        const navMenu = document.getElementById('nav-menu');
+
+        hamburger.addEventListener('click', () => {
+            navMenu.classList.toggle('active');
+        });
+
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', () => navMenu.classList.remove('active'));
+        });
+
+        // 4. INTERACTIVE QUIZ FUNCTION
+        function checkAnswer(button, val) {
+            const resultDiv = document.getElementById('quiz-result');
+            const options = document.querySelectorAll('.option-btn');
+            
+            options.forEach(btn => {
+                btn.classList.remove('correct', 'wrong');
+                btn.disabled = true;
+            });
+
+            if (val === 4) {
+                button.classList.add('correct');
+                resultDiv.innerHTML = "<span style='color: #28a745;'>Jawaban Benar 🎉</span>";
+            } else {
+                button.classList.add('wrong');
+                resultDiv.innerHTML = "<span style='color: #dc3545;'>Coba Lagi.</span>";
+                setTimeout(() => {
+                    options.forEach(btn => { btn.disabled = false; btn.classList.remove('wrong'); });
+                    resultDiv.innerHTML = "";
+                }, 1500);
+            }
+        }
+
+        // 5. SEARCH FUNCTIONALITY
+        const searchInput = document.getElementById('search-input');
+        searchInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                const query = this.value.toLowerCase().trim();
+                if (!query) return;
+
+                const searchableElements = document.querySelectorAll('.card h3, .section-title, .structure-box h3, .tokoh-card h3');
+                let found = false;
+
+                for (let elem of searchableElements) {
+                    if (elem.textContent.toLowerCase().includes(query)) {
+                        elem.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        elem.style.transition = 'color 0.3s ease';
+                        const originalColor = elem.style.color;
+                        elem.style.color = 'var(--accent)';
+                        
+                        setTimeout(() => { elem.style.color = originalColor; }, 2000);
+                        found = true;
+                        break;
+                    }
+                }
+                if(!found) alert('Materi tidak ditemukan. Silakan coba kata kunci lain.');
+            }
+        });
+
+        // 6. BACK TO TOP SCROLL MONITOR
+        const scrollTopBtn = document.getElementById('scrollTop');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 400) {
+                scrollTopBtn.classList.add('show');
+            } else {
+                scrollTopBtn.classList.remove('show');
+            }
+        });
+
+        function scrollToTop() {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // 7. INTERSECTION OBSERVER FOR FADE-IN ANIMATION
+        const observerOptions = { threshold: 0.1, rootMargin: "0px 0px -50px 0px" };
+        const observer = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('is-visible');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.fade-in-element').forEach(el => observer.observe(el));
+    </script>
+</body>
+</html>
+
